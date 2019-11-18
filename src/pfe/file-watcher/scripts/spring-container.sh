@@ -341,6 +341,10 @@ function deployLocal() {
 			exit 3
 		fi
 	fi
+	if [ $? -eq 137 ]; then
+		$util updateBuildState $PROJECT_ID $BUILD_STATE_FAILED "buildscripts.outOfMemory"
+		exit 3
+	fi
 
 	# Build the Spring application
 	runMavenBuild
@@ -399,6 +403,9 @@ function runMavenBuild() {
 
 	if [ $exit_code -eq 0 ]; then
 		$util updateBuildState $PROJECT_ID $BUILD_STATE_SUCCESS " "
+	elif [ $exit_code -eq 137 ]; then
+		$util updateBuildState $PROJECT_ID $BUILD_STATE_FAILED "buildscripts.outOfMemory"
+		exit 3
 	else
 		$util updateBuildState $PROJECT_ID $BUILD_STATE_FAILED "buildscripts.buildMavenFail"
 		exit 3
@@ -441,6 +448,9 @@ function start() {
 		echo "Project start failed for: $projectName"
 		errorMsg="Application $projectName failed to start"
 		$util updateAppState $PROJECT_ID $APP_STATE_STOPPED "$errorMsg"
+		if [ $exit_code -eq 137 ]; then
+			$util updateBuildState $PROJECT_ID $BUILD_STATE_FAILED "buildscripts.outOfMemory"
+		fi
 		exit 3
 	fi
 }
@@ -501,6 +511,9 @@ function modifyDockerfileAndBuild() {
 		echo "$BUILD_IMAGE_SUCCESS_MSG $projectName"
 		# The application still needs to be built so don't send a build success event
 		$util updateBuildState $PROJECT_ID $BUILD_STATE_INPROGRESS "buildscripts.containerBuildSuccess" "$imageLastBuild"
+	elif [ $exit_code -eq 137 ]; then
+		$util updateBuildState $PROJECT_ID $BUILD_STATE_FAILED "buildscripts.outOfMemory"
+		exit 3
 	else
 		echo "$BUILD_IMAGE_FAILED_MSG $projectName" >&2
 		$util updateBuildState $PROJECT_ID $BUILD_STATE_FAILED "buildscripts.buildFail"

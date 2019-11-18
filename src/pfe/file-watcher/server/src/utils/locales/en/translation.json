@@ -32,7 +32,8 @@
       "odoBuildPushInProgressMsg": "Building and deploying odo application",
       "odoBuildPushFailMsg": "Failed to build or deploy odo application",
       "odoBuildUrlInProgressMsg": "Creating URL for odo application",
-      "odoBuildUrlFailMsg": "Fail to create URL for odo application"
+      "odoBuildUrlFailMsg": "Fail to create URL for odo application",
+      "outOfMemory": "An Out Of Memory error occurred. Please check resource limits."
   },
   "buildApplicationTask": {
     "pomChangeDetected": "pom.xml change detected, running clean build",
