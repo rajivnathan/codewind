@@ -52,7 +52,7 @@ const pingInterval = 10000;
 const inTransitPingInterval = 2000;
 export const pingCountMap = new Map();
 
-const troubleShootLink = "https://www.eclipse.org/codewind/troubleshooting.html#checking-the-application-and-build-statuses";
+const troubleShootLink = "https://www.eclipse.org/codewind/troubleshooting.html#troubleshooting-project-application-and-build-statuses";
 
 // Keep track of project status.  The type parameter is used to determine the type of the status
 // such as application state or build status.
